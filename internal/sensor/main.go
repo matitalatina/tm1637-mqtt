@@ -81,6 +81,12 @@ func reverseInt(s []int) {
 }
 
 func splitToDigits(n int) []int {
+	if n > 9999 {
+		return []int{9, 9, 9, 9}
+	}
+	if n <= 0 {
+		return []int{0, 0, 0, 0}
+	}
 	var ret []int
 
 	i := 0
