@@ -39,9 +39,6 @@ func Start(c Config) {
 	if err != nil {
 		log.Fatalf("failed to initialize tm1637: %v", err)
 	}
-	if err := dev.SetBrightness(tm1637.Brightness10); err != nil {
-		log.Fatalf("failed to set brightness on tm1637: %v", err)
-	}
 
 	opts := mqtt.NewClientOptions().AddBroker(c.MqttBroker).SetUsername(c.MqttUsername).SetPassword(c.MqttPassword).SetClientID("tm1637-mqtt")
 
@@ -55,6 +52,9 @@ func Start(c Config) {
 
 	var f mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
 		fmt.Printf("MSG: %s\n", msg.Payload())
+		if err := dev.SetBrightness(tm1637.Brightness10); err != nil {
+			log.Fatalf("failed to set brightness on tm1637: %v", err)
+		}
 		strPayload, err := strconv.Atoi(string(msg.Payload()))
 		if err != nil {
 			log.Fatalf("unable to parse payload: %v", err)
